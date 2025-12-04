@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getTeams } from "../api";
+import { getTeam } from "../api";
 
 export default function AbstractDetails() {
   const { id } = useParams();
