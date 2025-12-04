@@ -1,10 +1,10 @@
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
-import Navbar from "./Navbar";
-import Login from "./Login";
-import Dashboard from "./Dashboard";
-import AddTeam from "./AddTeam";
-import ViewTeams from "./ViewTeams";
-import AbstractDetails from "./AbstractDetails";
+import Navbar from "./components/Navbar.jsx";
+import Login from "./pages/Login.jsx";
+import Dashboard from "./pages/Dashboard.jsx";
+import AddTeam from "./pages/AddTeam.jsx";
+import ViewTeams from "./pages/ViewTeams.jsx";
+import AbstractDetails from "./pages/AbstractDetails.jsx";
 import "./App.css";
 
 function ProtectedRoute({ children }) {
