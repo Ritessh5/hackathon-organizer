@@ -1,50 +1,69 @@
 import { useEffect, useState } from "react";
-import { getTeam } from "../api";
 import { useParams } from "react-router-dom";
+import { getTeam } from "./api";
 
 export default function AbstractDetails() {
   const { id } = useParams();
   const [team, setTeam] = useState(null);
 
   useEffect(() => {
-    getTeam(id).then(setTeam);
+    getTeam(id)
+      .then(setTeam)
+      .catch(() => setTeam(null));
   }, [id]);
 
-  if (!team) return <p>Loading...</p>;
+  if (!team) {
+    return (
+      <div className="page-shell">
+        <p>Loading team details...</p>
+      </div>
+    );
+  }
 
   return (
-    <div className="container py-4" style={{ maxWidth: "900px" }}>
-      <h2 className="page-title">{team.team_name}</h2>
+    <div className="page-shell">
+      <div className="page-header">
+        <h2>{team.team_name}</h2>
+        <p>
+          {team.institution && <span>{team.institution} • </span>}
+          {team.state && <span>{team.state}</span>}
+        </p>
+      </div>
 
-      <div className="card shadow p-4">
-        <p><strong>Leader:</strong> {team.leader_name}</p>
-        <p><strong>State:</strong> {team.state}</p>
-        <p><strong>Institution:</strong> {team.institution}</p>
+      <div className="glass-card details-card">
+        <div className="details-meta">
+          <p><strong>Leader:</strong> {team.leader_name}</p>
+          {team.tech_stack && (
+            <p>
+              <strong>Tech Stack:</strong> {team.tech_stack}
+            </p>
+          )}
+        </div>
 
-        <hr />
+        <div className="details-section">
+          <h4>Problem Statement</h4>
+          <p>{team.problem_statement || "Not provided."}</p>
+        </div>
 
-        <h5>Problem Statement</h5>
-        <p>{team.problem_statement}</p>
+        <div className="details-section">
+          <h4>Problem Identified</h4>
+          <p>{team.problem_identified || "Not provided."}</p>
+        </div>
 
-        <h5>Problem Identified</h5>
-        <p>{team.problem_identified}</p>
-
-        <h5>Solution Description</h5>
-        <p>{team.solution_description}</p>
-
-        <h5>Technology Stack</h5>
-        <p>{team.tech_stack}</p>
+        <div className="details-section">
+          <h4>Solution Description</h4>
+          <p>{team.solution_description || "Not provided."}</p>
+        </div>
 
         {team.diagram_url && (
-          <>
-            <h5 className="mt-3">Diagram</h5>
+          <div className="details-section">
+            <h4>Architecture / Diagram</h4>
             <img
               src={team.diagram_url}
-              alt="Diagram"
-              className="img-fluid mt-2"
-              style={{ borderRadius: "8px", maxHeight: "350px" }}
+              alt="Architecture diagram"
+              className="details-diagram"
             />
-          </>
+          </div>
         )}
       </div>
     </div>

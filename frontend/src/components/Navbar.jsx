@@ -1,7 +1,8 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
 export default function Navbar() {
   const navigate = useNavigate();
+  const location = useLocation();
   const token = localStorage.getItem("token");
 
   const logout = () => {
@@ -9,57 +10,37 @@ export default function Navbar() {
     navigate("/login");
   };
 
+  // Active link helper
+  const isActive = (path) => location.pathname.startsWith(path);
+
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark">
-      <div className="container-fluid">
-        <Link className="navbar-brand" to="/dashboard">
-          🚀 Hackathon Admin
-        </Link>
-
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#menu"
-        >
-          <span className="navbar-toggler-icon"></span>
-        </button>
-
-        <div className="collapse navbar-collapse" id="menu">
-          <ul className="navbar-nav mx-auto gap-3">
-            {token && (
-              <>
-                <li className="nav-item">
-                  <Link className="nav-link" to="/dashboard">
-                    Dashboard
-                  </Link>
-                </li>
-
-                <li className="nav-item">
-                  <Link className="nav-link" to="/add-team">
-                    Add Team
-                  </Link>
-                </li>
-              </>
-            )}
-
-            <li className="nav-item">
-              <Link className="nav-link" to="/teams">
-                View Teams
-              </Link>
-            </li>
-          </ul>
-
-          {token ? (
-            <button className="btn btn-outline-light" onClick={logout}>
-              Logout
-            </button>
-          ) : (
-            <Link className="btn btn-light" to="/login">
-              Login
-            </Link>
-          )}
+    <nav className="agri-navbar">
+      <div className="agri-nav-inner">
+        <div className="agri-nav-left" onClick={() => navigate("/dashboard")}>
+          <span className="agri-logo-icon">🚜</span>
+          <div className="agri-logo-text">
+            <span className="agri-logo-title">Agri-Tech Admin</span>
+            <span className="agri-logo-subtitle">Hackathon 2026 • Control Panel</span>
+          </div>
         </div>
+
+        <ul className="agri-nav-links">
+          <li className={isActive("/dashboard") ? "active" : ""}>
+            <Link to="/dashboard">Dashboard</Link>
+          </li>
+          <li className={isActive("/add-team") ? "active" : ""}>
+            <Link to="/add-team">Add Team</Link>
+          </li>
+          <li className={isActive("/teams") ? "active" : ""}>
+            <Link to="/teams">View Teams</Link>
+          </li>
+        </ul>
+
+        {token && (
+          <button className="agri-btn-outline" onClick={logout}>
+            Logout
+          </button>
+        )}
       </div>
     </nav>
   );

@@ -1,67 +1,94 @@
 import { useEffect, useState } from "react";
-import { getTeams } from "../api";
+import { getTeams } from "./api";
 import { useNavigate } from "react-router-dom";
 
 export default function ViewTeams() {
   const [teams, setTeams] = useState([]);
   const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const loadTeams = () => {
-    getTeams({ q: search || undefined }).then(setTeams);
+  const loadTeams = async (q) => {
+    setLoading(true);
+    try {
+      const data = await getTeams(q ? { q } : {});
+      setTeams(data);
+    } catch {
+      console.error("Failed fetching teams");
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
     loadTeams();
   }, []);
 
-  return (
-    <div className="container py-4">
-      <h2 className="page-title">All Teams</h2>
+  const handleSearch = (e) => {
+    e.preventDefault();
+    loadTeams(search);
+  };
 
-      <form className="input-group mb-4" onSubmit={(e) => { e.preventDefault(); loadTeams(); }}>
+  return (
+    <div className="page-shell">
+      <div className="page-header">
+        <h2>Teams & Abstracts</h2>
+        <p>Search by team name, leader, state, institution or tech stack.</p>
+      </div>
+
+      <form className="search-row" onSubmit={handleSearch}>
         <input
-          className="form-control"
-          placeholder="Search by team, leader, tech stack..."
+          className="agri-input search-input"
+          placeholder="Search teams..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
-        <button className="btn btn-primary">Search</button>
+        <button className="agri-btn-primary search-btn" disabled={loading}>
+          {loading ? "Searching..." : "Search"}
+        </button>
       </form>
 
-      <table className="table table-hover">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Team</th>
-            <th>Leader</th>
-            <th>State</th>
-            <th>Tech Stack</th>
-            <th></th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {teams.map((t, i) => (
-            <tr key={t.id}>
-              <td>{i + 1}</td>
-              <td>{t.team_name}</td>
-              <td>{t.leader_name}</td>
-              <td>{t.state}</td>
-              <td>{t.tech_stack}</td>
-              <td>
-                <button
-                  onClick={() => navigate(`/teams/${t.id}`)}
-                  className="btn btn-sm btn-outline-primary"
-                >
-                  View
-                </button>
-              </td>
+      <div className="table-wrapper glass-card">
+        <table className="agri-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Team</th>
+              <th>Leader</th>
+              <th>State</th>
+              <th>Tech Stack</th>
+              <th></th>
             </tr>
-          ))}
-        </tbody>
+          </thead>
+          <tbody>
+            {teams.map((t, i) => (
+              <tr key={t.id}>
+                <td>{i + 1}</td>
+                <td>{t.team_name}</td>
+                <td>{t.leader_name}</td>
+                <td>{t.state}</td>
+                <td>{t.tech_stack}</td>
+                <td>
+                  <button
+                    className="agri-btn-outline small"
+                    onClick={() => navigate(`/teams/${t.id}`)}
+                  >
+                    View
+                  </button>
+                </td>
+              </tr>
+            ))}
 
-      </table>
+            {!loading && teams.length === 0 && (
+              <tr>
+                <td colSpan="6" className="empty-row">
+                  No teams found yet. Once abstracts are imported, they’ll appear here.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
