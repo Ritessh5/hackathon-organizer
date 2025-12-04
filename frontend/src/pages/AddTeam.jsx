@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { addTeam } from "./api";
+import { addTeam } from "../api";
 
 export default function AddTeam() {
   const [form, setForm] = useState({});

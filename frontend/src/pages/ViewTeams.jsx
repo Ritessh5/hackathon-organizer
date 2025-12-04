@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getTeams } from "./api";
+import { getTeams } from "../api";
 import { useNavigate } from "react-router-dom";
 
 export default function ViewTeams() {

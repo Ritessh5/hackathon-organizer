@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getTeams } from "./api";
+import { getTeams } from "../api";
 
 export default function Dashboard() {
   const [teams, setTeams] = useState([]);
