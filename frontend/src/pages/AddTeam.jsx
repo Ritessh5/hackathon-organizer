@@ -36,7 +36,7 @@ export default function AddTeam() {
   };
 
   return (
-    <div className="page-shell">
+    <div className="page-shell center-page">
       <div className="page-header">
         <h2>Add Team Manually</h2>
         <p>Use this to create or correct team entries outside the Unstop export.</p>
@@ -44,7 +44,7 @@ export default function AddTeam() {
 
       {msg && <div className="alert alert-info">{msg}</div>}
 
-      <div className="glass-card form-card">
+      <div className="glass-card form-card centered-form">
         <form onSubmit={submit} className="agri-form-grid">
           <div className="form-group">
             <label>Team Name</label>

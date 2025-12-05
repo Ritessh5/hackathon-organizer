@@ -7,3 +7,102 @@
 .app-page {
   padding-top: 72px; /* space for navbar when logged in */
 }
+
+/* Center page content */
+.center-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Center form card properly */
+.centered-form {
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+}
+/* Make table fill full width */
+.full-width-table {
+  width: 100%;
+  max-width: 1200px;
+  margin: 20px auto;
+}
+
+/* Make tables scrollable on mobile */
+.agri-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+/* Table rows */
+.agri-table th, .agri-table td {
+  padding: 12px 14px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+/* Mobile fix: stack columns */
+@media (max-width: 700px) {
+  .agri-table th, .agri-table td {
+    padding: 10px 6px;
+    font-size: 14px;
+  }
+
+  .search-row {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .search-input {
+    width: 100%;
+  }
+}
+.action-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.small {
+  padding: 6px 12px;
+  font-size: 13px;
+}
+/* Make all cards responsive */
+.glass-card {
+  width: 100%;
+  max-width: 1200px;
+  margin: auto;
+}
+
+/* Page padding */
+.page-shell {
+  padding: 20px;
+}
+
+/* Navbar responsive */
+@media (max-width: 768px) {
+  nav {
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+  }
+
+  nav a {
+    padding: 10px 0;
+  }
+}
+
+/* Form input responsive */
+.agri-input, .agri-textarea {
+  width: 100%;
+}
+
+/* Form layout responsive */
+.agri-form-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}

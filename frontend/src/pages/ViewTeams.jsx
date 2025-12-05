@@ -61,7 +61,7 @@ export default function ViewTeams() {
         </button>
       </form>
 
-      <div className="table-wrapper glass-card">
+      <div className="table-wrapper glass-card full-width-table">
         <table className="agri-table">
           <thead>
             <tr>
