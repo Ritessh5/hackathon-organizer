@@ -1,6 +1,9 @@
+import { useState, useEffect } from "react";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+
 import Navbar from "./components/Navbar.jsx";
 import Footer from "./components/Footer.jsx";
+import LoadingScreen from "./components/LoadingScreen.jsx";
 
 import Login from "./pages/Login.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
@@ -12,34 +15,47 @@ import EditTeam from "./pages/EditTeam.jsx";
 import "./App.css";
 
 /* --------------------------------------------
-   PROTECTED ROUTE WITH AUTO-LOGOUT
+   PROTECTED ROUTE
 --------------------------------------------- */
 function ProtectedRoute({ children }) {
   const token = localStorage.getItem("token");
-
-  // No token → redirect to login
-  if (!token) return <Navigate to="/login" replace />;
-
-  return children;
+  return token ? children : <Navigate to="/login" replace />;
 }
 
-function App() {
-  const token = localStorage.getItem("token");
+export default function App() {
   const location = useLocation();
+  const token = localStorage.getItem("token");
 
-  // Hide navbar & footer ONLY on login page
-  const isLoginRoute = location.pathname === "/login";
+  /* --------------------------------------------
+     ⏳ LOADING SCREEN (runs only on first visit)
+  --------------------------------------------- */
+  const [showLoader, setShowLoader] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setShowLoader(false), 2500);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (showLoader) {
+    return <LoadingScreen />; // ⟵ SHOW LOADING FIRST
+  }
+
+  /* --------------------------------------------
+     Hide Navbar & Footer on Login Page
+  --------------------------------------------- */
+  const isLoginPage = location.pathname === "/login";
 
   return (
     <div className="app-root">
 
-      {/* NAVBAR - visible only after login */}
-      {token && !isLoginRoute && <Navbar />}
+      {/* NAVBAR (only when logged in & not on login page) */}
+      {token && !isLoginPage && <Navbar />}
 
-      {/* PAGE CONTENT */}
+      {/* ROUTES */}
       <div className="app-page">
         <Routes>
-          {/* ROOT → Auto redirect */}
+
+          {/* BASE PATH → redirects */}
           <Route
             path="/"
             element={
@@ -57,7 +73,7 @@ function App() {
             element={token ? <Navigate to="/dashboard" replace /> : <Login />}
           />
 
-          {/* DASHBOARD */}
+          {/* MAIN PAGES */}
           <Route
             path="/dashboard"
             element={
@@ -67,7 +83,6 @@ function App() {
             }
           />
 
-          {/* ADD TEAM */}
           <Route
             path="/add-team"
             element={
@@ -77,7 +92,6 @@ function App() {
             }
           />
 
-          {/* VIEW TEAMS */}
           <Route
             path="/teams"
             element={
@@ -87,7 +101,6 @@ function App() {
             }
           />
 
-          {/* ABSTRACT / TEAM DETAILS */}
           <Route
             path="/teams/:id"
             element={
@@ -97,7 +110,6 @@ function App() {
             }
           />
 
-          {/* EDIT TEAM */}
           <Route
             path="/teams/edit/:id"
             element={
@@ -107,7 +119,7 @@ function App() {
             }
           />
 
-          {/* FALLBACK ROUTES */}
+          {/* FALLBACK */}
           <Route
             path="*"
             element={
@@ -121,10 +133,8 @@ function App() {
         </Routes>
       </div>
 
-      {/* FOOTER - hidden on login */}
-      {token && !isLoginRoute && <Footer />}
+      {/* FOOTER (only when logged in) */}
+      {token && !isLoginPage && <Footer />}
     </div>
   );
 }
-
-export default App;
