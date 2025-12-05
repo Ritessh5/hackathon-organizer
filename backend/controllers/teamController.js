@@ -1,7 +1,7 @@
 const prisma = require("../prismaClient");
 const cloudinary = require("../utils/cloudinary");
 
-// Add team (POST /api/teams) – protected
+// CREATE TEAM
 const addTeam = async (req, res) => {
   try {
     let diagramUrl = null;
@@ -9,11 +9,9 @@ const addTeam = async (req, res) => {
     if (req.file) {
       const b64 = Buffer.from(req.file.buffer).toString("base64");
       const dataURI = `data:${req.file.mimetype};base64,${b64}`;
-
       const uploadRes = await cloudinary.uploader.upload(dataURI, {
         folder: "hackathon-diagrams"
       });
-
       diagramUrl = uploadRes.secure_url;
     }
 
@@ -38,7 +36,7 @@ const addTeam = async (req, res) => {
   }
 };
 
-// Get all teams (GET /api/teams)
+// GET ALL TEAMS
 const getTeams = async (req, res) => {
   try {
     const { q, state, tech } = req.query;
@@ -55,13 +53,8 @@ const getTeams = async (req, res) => {
       ];
     }
 
-    if (state) {
-      where.state = { contains: state, mode: "insensitive" };
-    }
-
-    if (tech) {
-      where.tech_stack = { contains: tech, mode: "insensitive" };
-    }
+    if (state) where.state = { contains: state, mode: "insensitive" };
+    if (tech) where.tech_stack = { contains: tech, mode: "insensitive" };
 
     const teams = await prisma.team.findMany({
       where,
@@ -75,14 +68,11 @@ const getTeams = async (req, res) => {
   }
 };
 
-// Get single team (GET /api/teams/:id)
+// GET SINGLE TEAM
 const getTeam = async (req, res) => {
   try {
-    const id = parseInt(req.params.id, 10);
-
-    const team = await prisma.team.findUnique({
-      where: { id }
-    });
+    const id = Number(req.params.id);
+    const team = await prisma.team.findUnique({ where: { id } });
 
     if (!team) return res.status(404).json({ message: "Team not found" });
 
@@ -93,4 +83,49 @@ const getTeam = async (req, res) => {
   }
 };
 
-module.exports = { addTeam, getTeams, getTeam };
+// UPDATE TEAM
+const updateTeam = async (req, res) => {
+  try {
+    const id = Number(req.params.id);
+
+    let diagramUrl = undefined;
+
+    if (req.file) {
+      const b64 = Buffer.from(req.file.buffer).toString("base64");
+      const dataURI = `data:${req.file.mimetype};base64,${b64}`;
+      const uploadRes = await cloudinary.uploader.upload(dataURI, {
+        folder: "hackathon-diagrams"
+      });
+      diagramUrl = uploadRes.secure_url;
+    }
+
+    const updated = await prisma.team.update({
+      where: { id },
+      data: {
+        ...req.body,
+        diagram_url: diagramUrl ?? undefined,
+      }
+    });
+
+    res.json(updated);
+  } catch (err) {
+    console.error("Error updating team:", err);
+    res.status(500).json({ message: "Error updating team" });
+  }
+};
+
+// DELETE TEAM
+const deleteTeam = async (req, res) => {
+  try {
+    const id = Number(req.params.id);
+
+    await prisma.team.delete({ where: { id } });
+
+    res.json({ message: "Team deleted successfully" });
+  } catch (err) {
+    console.error("Error deleting team:", err);
+    res.status(500).json({ message: "Error deleting team" });
+  }
+};
+
+module.exports = { addTeam, getTeams, getTeam, updateTeam, deleteTeam };

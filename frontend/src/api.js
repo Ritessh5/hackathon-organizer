@@ -40,3 +40,24 @@ export const getTeam = async (id) => {
   if (!res.ok) throw new Error("Team not found");
   return res.json();
 };
+
+export const deleteTeam = async (id, token) => {
+  const res = await fetch(`${BASE_URL}/teams/${id}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+  if (!res.ok) throw new Error("Delete failed");
+  return res.json();
+};
+
+export const updateTeam = async (id, formData, token) => {
+  const res = await fetch(`${BASE_URL}/teams/${id}`, {
+    method: "PUT",
+    headers: { Authorization: `Bearer ${token}` },
+    body: formData,
+  });
+  if (!res.ok) throw new Error("Update failed");
+  return res.json();
+};

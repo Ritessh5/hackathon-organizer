@@ -83,6 +83,9 @@ function App() {
               token ? <Navigate to="/dashboard" replace /> : <Navigate to="/login" replace />
             }
           />
+
+          <Route path="/teams/edit/:id" element={<EditTeam />} />
+
         </Routes>
       </div>
     </div>

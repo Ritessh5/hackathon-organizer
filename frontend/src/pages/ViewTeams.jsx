@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getTeams } from "../api";
+import { getTeams, deleteTeam } from "../api";
 import { useNavigate } from "react-router-dom";
 
 export default function ViewTeams() {
@@ -7,6 +7,7 @@ export default function ViewTeams() {
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const token = localStorage.getItem("token");
 
   const loadTeams = async (q) => {
     setLoading(true);
@@ -27,6 +28,18 @@ export default function ViewTeams() {
   const handleSearch = (e) => {
     e.preventDefault();
     loadTeams(search);
+  };
+
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this team?")) return;
+
+    try {
+      await deleteTeam(id, token);
+      loadTeams();
+    } catch (err) {
+      alert("Delete failed");
+      console.error(err);
+    }
   };
 
   return (
@@ -57,9 +70,10 @@ export default function ViewTeams() {
               <th>Leader</th>
               <th>State</th>
               <th>Tech Stack</th>
-              <th></th>
+              <th>Actions</th>
             </tr>
           </thead>
+
           <tbody>
             {teams.map((t, i) => (
               <tr key={t.id}>
@@ -68,12 +82,26 @@ export default function ViewTeams() {
                 <td>{t.leader_name}</td>
                 <td>{t.state}</td>
                 <td>{t.tech_stack}</td>
-                <td>
+                <td className="action-buttons">
                   <button
                     className="agri-btn-outline small"
                     onClick={() => navigate(`/teams/${t.id}`)}
                   >
                     View
+                  </button>
+
+                  <button
+                    className="agri-btn-primary small"
+                    onClick={() => navigate(`/teams/edit/${t.id}`)}
+                  >
+                    Edit
+                  </button>
+
+                  <button
+                    className="agri-btn-danger small"
+                    onClick={() => handleDelete(t.id)}
+                  >
+                    Delete
                   </button>
                 </td>
               </tr>
