@@ -5,6 +5,7 @@ import Dashboard from "./pages/Dashboard.jsx";
 import AddTeam from "./pages/AddTeam.jsx";
 import ViewTeams from "./pages/ViewTeams.jsx";
 import AbstractDetails from "./pages/AbstractDetails.jsx";
+import EditTeam from "./pages/EditTeam.jsx";
 import "./App.css";
 
 function ProtectedRoute({ children }) {
@@ -84,7 +85,15 @@ function App() {
             }
           />
 
-          <Route path="/teams/edit/:id" element={<EditTeam />} />
+          <Route
+            path="/teams/edit/:id"
+            element={
+              <ProtectedRoute>
+                <EditTeam />
+              </ProtectedRoute>
+            }
+          />
+
 
         </Routes>
       </div>
