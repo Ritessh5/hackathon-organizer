@@ -22,7 +22,7 @@
 
 .centered-form {
   width: 100%;
-  max-width: 900px;      /* Wider and centered */
+  max-width: 900px;
   margin: 0 auto;
 }
 
@@ -75,7 +75,7 @@
   width: 100%;
   border-collapse: collapse;
   color: white;
-  min-width: 900px;    /* Ensures proper layout on desktop */
+  min-width: 900px;
 }
 
 .agri-table th,
@@ -109,10 +109,18 @@
   color: #00e676;
 }
 
+.agri-btn-outline:hover {
+  background: rgba(0, 230, 118, 0.15);
+}
+
 .agri-btn-primary {
   background: #00e676;
   border: none;
   color: #000;
+}
+
+.agri-btn-primary:hover {
+  filter: brightness(1.1);
 }
 
 .agri-btn-danger {
@@ -121,13 +129,17 @@
   color: white;
 }
 
+.agri-btn-danger:hover {
+  filter: brightness(1.15);
+}
+
 /* -----------------------------
  Responsive Design (Mobile Friendly)
 ----------------------------- */
 
 @media (max-width: 768px) {
   .agri-form-grid {
-    grid-template-columns: 1fr; /* Stack everything */
+    grid-template-columns: 1fr;
   }
 
   .agri-form-grid .full-width {
@@ -142,6 +154,7 @@
     flex-direction: column;
   }
 }
+
 /* ========================= */
 /* FOOTER */
 /* ========================= */
@@ -223,5 +236,111 @@
 
   .footer-socials {
     justify-content: center;
+  }
+}
+
+/* ========================= */
+/* RESPONSIVE NAVBAR */
+/* ========================= */
+
+.agri-navbar {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(20px);
+  position: sticky;
+  top: 0;
+  z-index: 999;
+}
+
+.nav-container {
+  max-width: 1400px;
+  margin: auto;
+  padding: 12px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-icon {
+  font-size: 28px;
+  color: #6afc7d;
+}
+
+.logo-text {
+  font-size: 20px;
+  font-weight: 700;
+  color: white;
+}
+
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: 30px;
+  align-items: center;
+}
+
+.nav-links li a {
+  color: white;
+  font-size: 16px;
+  text-decoration: none;
+}
+
+.logout-btn {
+  padding: 6px 16px;
+  background: transparent;
+  color: white;
+  border: 1px solid #6afc7d;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.logout-btn:hover {
+  background: #6afc7d;
+  color: black;
+}
+
+.mobile-menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 26px;
+  color: white;
+  cursor: pointer;
+}
+
+.mobile-menu {
+  display: none;
+  flex-direction: column;
+  list-style: none;
+  background: rgba(0, 0, 0, 0.35);
+  padding: 20px;
+  gap: 20px;
+}
+
+.mobile-menu li a,
+.mobile-menu button {
+  font-size: 18px;
+  color: white;
+  text-decoration: none;
+}
+
+/* Mobile Navbar Behavior */
+@media (max-width: 900px) {
+  .desktop-only {
+    display: none;
+  }
+
+  .mobile-menu-btn {
+    display: block;
+  }
+
+  .mobile-menu {
+    display: flex;
   }
 }

@@ -1,47 +1,49 @@
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { FaBars, FaTimes, FaTractor } from "react-icons/fa";
 
 export default function Navbar() {
+  const [open, setOpen] = useState(false);
   const navigate = useNavigate();
-  const location = useLocation();
-  const token = localStorage.getItem("token");
 
   const logout = () => {
     localStorage.removeItem("token");
     navigate("/login");
   };
 
-  // Active link helper
-  const isActive = (path) => location.pathname.startsWith(path);
-
   return (
     <nav className="agri-navbar">
-      <div className="agri-nav-inner">
-        <div className="agri-nav-left" onClick={() => navigate("/dashboard")}>
-          <span className="agri-logo-icon">🚜</span>
-          <div className="agri-logo-text">
-            <span className="agri-logo-title">Agri-Tech Admin</span>
-            <span className="agri-logo-subtitle">Hackathon 2026 • Control Panel</span>
-          </div>
+      <div className="nav-container">
+        
+        {/* Logo */}
+        <div className="nav-left">
+          <FaTractor className="logo-icon" />
+          <span className="logo-text">Agri-Tech Admin</span>
         </div>
 
-        <ul className="agri-nav-links">
-          <li className={isActive("/dashboard") ? "active" : ""}>
-            <Link to="/dashboard">Dashboard</Link>
-          </li>
-          <li className={isActive("/add-team") ? "active" : ""}>
-            <Link to="/add-team">Add Team</Link>
-          </li>
-          <li className={isActive("/teams") ? "active" : ""}>
-            <Link to="/teams">View Teams</Link>
-          </li>
+        {/* Desktop Menu */}
+        <ul className="nav-links desktop-only">
+          <li><Link to="/dashboard">Dashboard</Link></li>
+          <li><Link to="/add-team">Add Team</Link></li>
+          <li><Link to="/teams">View Teams</Link></li>
+          <li><button onClick={logout} className="logout-btn">Logout</button></li>
         </ul>
 
-        {token && (
-          <button className="agri-btn-outline" onClick={logout}>
-            Logout
-          </button>
-        )}
+        {/* Mobile Menu Toggle Button */}
+        <button className="mobile-menu-btn" onClick={() => setOpen(!open)}>
+          {open ? <FaTimes /> : <FaBars />}
+        </button>
       </div>
+
+      {/* Mobile Dropdown Menu */}
+      {open && (
+        <ul className="mobile-menu">
+          <li><Link onClick={() => setOpen(false)} to="/dashboard">Dashboard</Link></li>
+          <li><Link onClick={() => setOpen(false)} to="/add-team">Add Team</Link></li>
+          <li><Link onClick={() => setOpen(false)} to="/teams">View Teams</Link></li>
+          <li><button onClick={logout} className="logout-btn">Logout</button></li>
+        </ul>
+      )}
     </nav>
   );
 }
