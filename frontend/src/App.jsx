@@ -11,9 +11,15 @@ import EditTeam from "./pages/EditTeam.jsx";
 
 import "./App.css";
 
+/* --------------------------------------------
+   PROTECTED ROUTE WITH AUTO-LOGOUT
+--------------------------------------------- */
 function ProtectedRoute({ children }) {
   const token = localStorage.getItem("token");
+
+  // No token → redirect to login
   if (!token) return <Navigate to="/login" replace />;
+
   return children;
 }
 
@@ -21,18 +27,19 @@ function App() {
   const token = localStorage.getItem("token");
   const location = useLocation();
 
-  // Hide navbar + footer ONLY on login page
+  // Hide navbar & footer ONLY on login page
   const isLoginRoute = location.pathname === "/login";
 
   return (
     <div className="app-root">
-      
-      {/* NAVBAR – visible only after login */}
+
+      {/* NAVBAR - visible only after login */}
       {token && !isLoginRoute && <Navbar />}
 
+      {/* PAGE CONTENT */}
       <div className="app-page">
         <Routes>
-          {/* Default redirect */}
+          {/* ROOT → Auto redirect */}
           <Route
             path="/"
             element={
@@ -44,12 +51,10 @@ function App() {
             }
           />
 
-          {/* LOGIN */}
+          {/* LOGIN PAGE */}
           <Route
             path="/login"
-            element={
-              token ? <Navigate to="/dashboard" replace /> : <Login />
-            }
+            element={token ? <Navigate to="/dashboard" replace /> : <Login />}
           />
 
           {/* DASHBOARD */}
@@ -82,7 +87,7 @@ function App() {
             }
           />
 
-          {/* ABSTRACT DETAILS */}
+          {/* ABSTRACT / TEAM DETAILS */}
           <Route
             path="/teams/:id"
             element={
@@ -102,7 +107,7 @@ function App() {
             }
           />
 
-          {/* ANY UNKNOWN ROUTE */}
+          {/* FALLBACK ROUTES */}
           <Route
             path="*"
             element={
@@ -116,7 +121,7 @@ function App() {
         </Routes>
       </div>
 
-      {/* FOOTER – also hidden on login page */}
+      {/* FOOTER - hidden on login */}
       {token && !isLoginRoute && <Footer />}
     </div>
   );

@@ -1,0 +1,63 @@
+.loading-container {
+  height: 100vh;
+  width: 100%;
+  background: #000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  color: white;
+}
+
+.tractor-icon {
+  width: 160px;
+  animation: float 2.5s ease-in-out infinite;
+  z-index: 10;
+}
+
+@keyframes float {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+  100% { transform: translateY(0); }
+}
+
+/* 🔥 REMOVED sprout background completely */
+
+/* Title */
+.loading-title {
+  font-size: 48px;
+  margin-top: 20px;
+  font-weight: 700;
+  color: #A4FF3F;
+  text-shadow: 0px 0px 12px #4ae371;
+}
+
+.loading-subtitle {
+  font-size: 18px;
+  margin-bottom: 30px;
+  opacity: 0.85;
+}
+
+/* Progress Bar */
+.progress-bar {
+  width: 350px;
+  height: 12px;
+  background: #222;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #1cff42, #00d678);
+  border-radius: 20px;
+  transition: width 0.2s ease;
+}
+
+.progress-text {
+  margin-top: 10px;
+  font-size: 18px;
+  color: #9eff7a;
+}
