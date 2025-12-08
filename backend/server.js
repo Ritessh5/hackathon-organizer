@@ -15,6 +15,7 @@ app.use(
     origin: [
       "http://localhost:5173",
       "https://hackathon-organizer.vercel.app",
+      "https://agritech-admin.vercel.app",
     ],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true,
